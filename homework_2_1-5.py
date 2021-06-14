@@ -22,7 +22,6 @@ while True:
 for i in range(len(my_list) - 1):
     if i % 2 == 0:
         my_list[i], my_list[i + 1] = my_list[i + 1], my_list[i]
-    i += 1
 
 print(my_list)
 
