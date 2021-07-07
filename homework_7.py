@@ -63,7 +63,7 @@ class Coat(Clothes):
         return round((self.param / 6.5 + 0.5), 2)
 
     def __str__(self):
-        return f'Расход ткани на пальто составит: {round((self.param / 6.5 + 0.5), 2)}'
+        return f'Расход ткани на пальто составит: {Coat.consumption(self)}'
 
 
 class Costume(Clothes):
@@ -85,7 +85,7 @@ class Costume(Clothes):
     def consumption(self):
         return round((2 * self.param + 0.3), 2)
     def __str__(self):
-        return f'Расход ткани на костюм составит: {round((2 * self.param + 0.3), 2)}'
+        return f'Расход ткани на костюм составит: {Costume.consumption(self)}'
 
 while True:
     try:
