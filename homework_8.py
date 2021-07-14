@@ -79,26 +79,39 @@ class GetListDig:
 GetListDig.get()
 
 
-# ЗАДАНИЕ 4-6 К СОЖАЛЕНИЮ НЕ ХВАТАЕТ ВРЕМЕНИ, ЧТОБЫ ДОДЕЛАТЬ
+# ЗАДАНИЕ 4-6
+
+class NoYear(Exception):
+    def __init__(self, txt):
+        self.txt = txt
+
 
 class Sklad:
-    _equipments = {'printer': [], 'xerox': [], 'scan': []}
+    _equipments = {'printer': [], 'xerox': [], 'scanner': []}
 
     def delivery(self,  *equips):
         for equip in equips:
-            self._equipments[equip.type].remove(equip.unit)
+            self._equipments[equip.eq_type].remove(equip.unit)
 
     def reception(self,  *equips):
         for equip in equips:
-            self._equipments[equip.type].append(equip.unit)
+            self._equipments[equip.eq_type].append(equip.unit)
+
 
 class Equipment:
-    def __init__(self, vender, model, year, type=None):
+    def __init__(self, vender, model, year, eq_type=None):
         self.vender = vender
         self.model = model
-        self.year = year
-        self.type = type
-        self.unit = {'Тип': self.type, 'Производитель': self.vender, 'Модель': self.model, 'Год': self.year}
+        self.eq_type = eq_type
+
+        try:
+            self.year = year
+            if str(year).isdigit() == False:
+                raise NoYear('Год введён неверно!')
+        except NoYear as err:
+            self.year = str(err)
+
+        self.unit = {'Тип': self.eq_type, 'Производитель': self.vender, 'Модель': self.model, 'Год': self.year}
 
     def __str__(self):
         return f'Info: {self.unit}'
@@ -106,27 +119,33 @@ class Equipment:
 
 
 class Printer(Equipment):
-    def __init__(self, vender, model, year, type='skaner'):
-        super().__init__(vender, model, year)
-        self.type = 'printer'
+    def __init__(self, vender, model, year, eq_type='printer'):
+        super().__init__(vender, model, year, eq_type)
+        self.eq_type = eq_type
 
-class Skaner(Equipment):
-    def __init__(self, vender, model, year, type='skaner'):
-        super().__init__(vender, model, year)
-        self.type = type
+class Scanner(Equipment):
+    def __init__(self, vender, model, year, eq_type='scanner'):
+        super().__init__(vender, model, year, eq_type)
+        self.eq_type = eq_type
 
 class Xerox(Equipment):
-    def __init__(self, vender, model, year, type='xerox'):
-        super().__init__(vender, model, year)
-        self.type = type
+    def __init__(self, vender, model, year, eq_type='xerox'):
+        super().__init__(vender, model, year, eq_type)
+        self.eq_type = eq_type
 
 
-e1 = Printer('Sony', 'kthb', 1999)
+e1 = Printer('Sony', 'kthb', 'yyyy')
 print(e1)
-s = Sklad
-s.reception(e1)
-print(s._equipments)
+e2 = Printer('HP', 'OfficeJet Pro 8210', 2020)
+e3 = Scanner('RIXET', 'RIXET', 2019)
+e4 = Xerox('4018', '4018', 2017)
 
+s = Sklad()
+s.reception(e1, e2, e3, e4)
+s.delivery(e1)
+
+for k, v in s._equipments.items():
+    print(f'{k} - {v}\n')
 
 # ЗАДАНИЕ 7
 
